@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "mysite"
+name = "aws_marketplace_project"
 version = "0.1.0"
-description = ""
-authors = ["Marek Kaput <marek.kaput@swmansion.com>"]
+description = "AWS Marketpace"
+authors = ["Seth Marquin Busque <sethmarquin.busque@awsys-i.com>"]
 
 [tool.poetry.dependencies]
 asgiref = "^3.4.1"

@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'aws_marketplace_project.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://postgres:postgres@localhost/postgres',
+        default='postgresql://postgres:postgres@localhost/aws_marketplace_app',
         conn_max_age=600
     )
 }
