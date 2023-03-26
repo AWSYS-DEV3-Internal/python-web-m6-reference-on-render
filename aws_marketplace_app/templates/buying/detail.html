@@ -1,0 +1,259 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'splide/css/splide.min.css' %}">
+<link rel="stylesheet" href="{% static 'splide/css/themes/splide-skyblue.min.css' %}">
+{% endblock %}
+{% block title %}{{ listing.title }} | AWS Marketplace{% endblock %}
+{% block content %}
+<div class="border-bottom bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <nav class="m-0 py-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="m-0 breadcrumb">
+                        <li class="breadcrumb-item"><a href="{url 'marketplace:index' }">Browse All</a></li>
+                        {% for category_crumb in category_crumbs %}
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'marketplace:browse_category' category_crumb.id %}">
+                                {{category_crumb.name}}
+                            </a>
+                        </li>
+                        {% endfor %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ listing.title }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-5">
+            <div id="ui-product-gallery" class="sticky-top mb-4" style="top: 5rem;">
+                <div id="main-slider" class="splide mb-2">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            {% if images|length > 0 %}
+                                {% for image in images %}
+                                    <li class="splide__slide">
+                                        <div class="image">
+                                            <img class="img-background" src="{{ image.image.url }}">
+                                            <img class="img-foreground" src="{{ image.image.url }}">
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="splide__slide">
+                                    <div class="image">
+                                        <img class="img-background" src="{% static 'main\img\item-sale.jpg' %}">
+                                        <img class="img-foreground" src="{% static 'main\img\item-sale.jpg' %}">
+                                    </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div id="thumbnail-slider" class="splide mb-4">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            {% if images|length > 0 %}
+                                {% for image in images %}
+                                    <li class="splide__slide">
+                                        <img class="img-fluid foreground-image shadow-lg"
+                                        src="{{ image.image.url }}">
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="splide__slide">
+                                    <img class="img-fluid foreground-image shadow-lg"
+                                        src="{% static 'main\img\item-sale.jpg' %}">
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-7">
+            <div class="float-end">
+                {% if user_wishlist|length > 0 %}    
+                    <form method="POST" action="{% url 'marketplace:browse_listing_unlike' listing.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-heart"></i>&nbsp;Remove from Wishlist&nbsp;({{ listing.wishlist_set.all|length }})
+                        </button>
+                    </form>
+                {% else %}
+                    <form method="POST" action="{% url 'marketplace:browse_listing_like' listing.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-light">
+                            <i class="far fa-heart"></i>&nbsp;Add to Wishlist&nbsp;({{ listing.wishlist_set.all|length }})
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+            <h3>{{ listing.title }}</h3>
+            <h2><strong>&#8369;{{ listing.price|floatformat:"2g" }}</strong></h2>
+            <p>Listed {{ listing.created_at|date }}</p>
+            {% if not listing.is_reserved and not listing.is_sold %}
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#confirmAddOrderModal">
+                    <i class="fas fa-cart-plus"></i>&nbsp;Buy Now
+                </button>
+            {% elif listing.is_sold %}
+                <button type="button" class="btn btn-danger btn-lg" disabled>
+                    <i class="fas fa-times-circle"></i>&nbsp;Sold Out
+                </button>
+            {% elif listing.is_reserved %}
+                <button type="button" class="btn btn-warning btn-lg" disabled>
+                    <i class="fas fa-minus-circle"></i>&nbsp;Reserved
+                </button>
+            {% endif %}
+            <hr class="my-4" />
+            <h4 class="my-4">Specifications</h4>
+            <div class="row row-cols-3">
+                <div class="col">
+                    <p class="m-0"><strong><small>Condition</small></strong></p>
+                    <p>{{ listing.get_condition_display }}</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Manufacturer</small></strong></p>
+                    <p>{{ listing.manufacturer }}</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Model Na</small>me</strong></p>
+                    <p>{{ listing.model_name }}</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Length</small></strong></p>
+                    <p>{{ listing.length_cm }}&nbsp;cm</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Width</small></strong></p>
+                    <p>{{ listing.width_cm }}&nbsp;cm</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Height</small></strong></p>
+                    <p>{{ listing.height_cm }}&nbsp;cm</p>
+                </div>
+            </div>
+            <hr class="my-4" />
+            <h4 class="my-4">Seller Information</h4>
+            <div class="card bg-light my-4" style="transform: rotate(0);">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            {% if listing.created_by.userprofile %}
+                                <img src="{{ listing.created_by.userprofile.display_image.url }}" class="img-thumbnail rounded-circle"
+                                style="min-height: 100px; min-width: 100px; max-height: 100px; max-width: 100px;" />
+                            {% else %}
+                                <img src="{% static 'main\img\628287_person_default_head_avatar_anonym_user_unknown.png' %}" class="img-thumbnail rounded-circle"
+                                style="min-height: 100px; min-width: 100px; max-height: 100px; max-width: 100px;" />
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <a class="text-decoration-none link-dark stretched-link" href="{% url 'marketplace:user_seller_profile' listing.created_by.id %}"><strong>{{ listing.created_by.first_name }}&nbsp;{{ listing.created_by.last_name }}</strong></a>
+                            <br>
+                            <small class="text-muted">@{{ listing.created_by.username }}</small><br>
+                            <small class="text-muted">Joined Marketplace in {{ listing.created_by.date_joined|date:'Y' }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4" />
+            <h4 class="my-4">Description</h4>
+            <p>{{ listing.description }}</p>
+            <hr class="my-4"" />
+            <h4 class="my-4">Checkout Options</h4>
+            <div class="row row-cols-3">
+                <div class="col">
+                    <p class="m-0"><strong><small>Meetup</small></strong></p>
+                    <p>
+                        {% if listing.can_meetup %}
+                        <span class="text-success"><i class="fas fa-check-circle"></i></span>&nbsp;Yes
+                        {% else %}
+                        <span class="text-danger"><i class="fas fa-times-circle"></i></span>&nbsp;No
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Delivery</small></strong></p>
+                    <p>
+                        {% if listing.can_deliver %}
+                        <span class="text-success"><i class="fas fa-check-circle"></i></span>&nbsp;Yes
+                        {% else %}
+                        <span class="text-danger"><i class="fas fa-times-circle"></i></span>&nbsp;No
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Address</small></strong></p>
+                    <p class="m-0">{{ listing.address }}</p>
+                    <p>{{ listing.postal_code }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if not listing.is_reserved and not listing.is_sold %}
+    <div class="modal fade" id="confirmAddOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmAddOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:browse_listing_order' listing.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmAddOrderModalLabel">Confirm Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ listing.title }}</p>
+                        <p>Are you sure you want to buy this listing?</p>
+                        <p>This will notify the seller that you are interested in this item.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle"></i>
+                            Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'splide/js/splide.min.js' %}"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var main = new Splide( '#main-slider', {
+            type       : 'fade',
+            cover      : false,
+            rewind     : true,
+            pagination : false,
+            arrows     : false,
+        });
+        var thumbnails = new Splide( '#thumbnail-slider', {
+            fixedWidth   : 60,
+            fixedHeight  : 60,
+            gap          : 10,
+            autoplay     : true,
+            rewind       : true,
+            pagination   : false,
+            cover        : true,
+            isNavigation : true,
+            focus        : 'center',
+            breakpoints: {
+                600: {
+                    fixedWidth : 44,
+                    fixedHeight: 44,
+                },
+            },
+        });
+        main.sync( thumbnails );
+        main.mount();
+        thumbnails.mount();
+    });
+</script>
+{% endblock %}

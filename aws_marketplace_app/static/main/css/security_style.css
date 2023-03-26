@@ -1,0 +1,50 @@
+.backdrop {
+    height: 100vh;
+    width: 100vw;
+}
+
+.backdrop > .container-fluid {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.backdrop > .container-fluid > .row {
+    height: 100vh;
+}
+
+#ui-banner {
+    background-image: url("/static/main/img/thought-catalog-505eectW54k-unsplash.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.parent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}
+
+.img-logo {
+    max-height: 64px;
+}
+
+#ui-login-banner {
+    background-image: url("/static/main/img/brooke-cagle-WHWYBmtn3_0-unsplash.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+#ui-reset-banner {
+    background-image: url("/static/main/img/kaitlyn-baker-vZJdYl5JVXY-unsplash.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+input[name="username"]{
+    background-color: red;
+    color: white;
+}

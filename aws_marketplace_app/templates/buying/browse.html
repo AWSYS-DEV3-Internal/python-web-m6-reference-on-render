@@ -1,0 +1,141 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}Browse All {{ category.name }} | AWS Marketplace{% endblock %}
+{% block content %}
+<div class="border-bottom bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <nav class="m-0 py-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="m-0 breadcrumb">
+                        {% if category_crumbs|length > 0 %}
+                            <li class="breadcrumb-item"><a href="{% url 'marketplace:index' %}">Browse All</a></li>
+                            {% for category_crumb in category_crumbs %}
+                                <li class="breadcrumb-item {% if category_crumb.current %}active{% endif %}">
+                                    {% if category_crumb.current %}
+                                        {{category_crumb.name}}
+                                    {% else %}
+                                        <a href="{% url 'marketplace:browse_category' category_crumb.id %}">
+                                            {{category_crumb.name}}
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="breadcrumb-item active">Browse All</li>
+                        {% endif %}
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4"> 
+    <h3>
+        Browse All {{ category.name }}
+    </h3>
+    <div class="row py-2">
+        <div class="col-3">
+            <ul class="sidebar nav list-group flex-column">
+                {% for node in category_tree %}
+                    {% for key, value in node.items %}
+                        <li class="nav-item list-group-item list-group-item-action p-0 dropdown dropend">
+                            <a href="{% url 'marketplace:browse_category' key %}" id="node-{{key}}" class="nav-link link-dark">
+                                <span>{{ value.data.name }}</span>
+                                {% if value.children|length > 0 %}
+                                    <span class="float-end"><i class="fas fa-angle-right"></i></span>
+                                {% endif %}    
+                            </a>
+                            {% if value.children|length > 0 %}
+                                <ul class="submenu nav dropdown-menu list-group border-0" aria-labelledby="node-{{key}}">
+                                    {% for sub_node in value.children %}
+                                        {% for key1, value1 in sub_node.items %}
+                                            <li class="nav-item list-group-item list-group-item-action p-0">
+                                                <a href="{% url 'marketplace:browse_category' key1 %}" class="nav-link link-dark" id="node-{{key}}">
+                                                    {{ value1.data.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}    
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-9">
+            {% if posting_list|length > 0 %}
+                <div class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                    {% for posting in posting_list %}
+                    <div class="col">
+                        <div class="card mb-3" style="transform: rotate(0);">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        {% if posting.created_by.userprofile %}
+                                            <img src="{{ posting.created_by.userprofile.display_image.url }}"
+                                            class="img-fluid rounded-circle border"
+                                            style="max-height: 48px;" />
+                                        {% else %}
+                                            <img src="{% static 'main\img\628287_person_default_head_avatar_anonym_user_unknown.png' %}"
+                                            class="img-fluid rounded-circle border"
+                                            style="max-height: 48px;" />
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <strong>{{ posting.created_by.username }}</strong><br>
+                                        <small class="text-muted moment-date" data-iso-date='{{ posting.created_at|date:"r" }}'></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="image">
+                                {% if posting.postingimage_set.all|length > 0 %}
+                                    <img class="img-background" src="{{ posting.postingimage_set.all.0.image.url }}"/>
+                                    <img class="img-foreground" src="{{ posting.postingimage_set.all.0.image.url }}"/>
+                                {% else %}
+                                    <img class="img-background" src="{% static 'main\img\item-sale.jpg' %}">
+                                    <img class="img-foreground" src="{% static 'main\img\item-sale.jpg' %}">
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <p class="m-0"><strong>&#8369;{{ posting.price|floatformat:"2g" }}</strong>
+                                </p>
+                                <p class="m-0">
+                                    {% if posting.is_sold %}
+                                        <span class="badge bg-danger text-light text-uppercase">Sold Out</span>
+                                    {% elif posting.is_reserved %}
+                                        <span class="badge bg-warning text-dark text-uppercase">Reserved</span>
+                                    {% endif %}
+                                    <a href="{% url 'marketplace:browse_listing' posting.pk %}" class="text-decoration-none link-dark stretched-link">
+                                        {{ posting.title }}
+                                    </a>
+                                </p>
+                                <p class="m-0"><small>{{ posting.get_condition_display }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center">
+                    <h1 class="display-6">Search No Result</h1>
+                    <img class="img-fluid m-5" src="{% static 'main\img\5283.png' %}" style="max-height: 40vh;">
+                    <p class="lead">We're sorry. We cannot find any matches for your search.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'main/js/moment.min.js' %}"></script>
+<script type="text/javascript">
+    (function(){
+        Array.prototype.slice.call(document.getElementsByClassName("moment-date")).forEach(element => {
+            var momentString = moment(element.dataset.isoDate).fromNow();
+            element.innerHTML = momentString;
+        });
+    })();
+</script>
+{% endblock %}

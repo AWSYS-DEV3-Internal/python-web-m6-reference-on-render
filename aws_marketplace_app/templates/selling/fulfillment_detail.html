@@ -1,0 +1,451 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'splide/css/splide.min.css' %}">
+<link rel="stylesheet" href="{% static 'splide/css/themes/splide-skyblue.min.css' %}">
+{% endblock %}
+{% block title %}Selling: {{ order.posting.title }} | AWS Marketplace{% endblock %}
+{% block content %}
+<div class="bg-light border-bottom">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <nav class="m-0 py-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="m-0 breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Selling</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'marketplace:selling_listings' %}">Listings</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ order.posting.title }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4">  
+    <h3>
+        Selling
+    </h3>
+    <div class="row py-2">
+        <div class="col-md-3">
+            {% include "selling/sidebar.html" %}
+        </div>
+        <div class="col-md-6">
+            {% if order.status == 0 %}
+                <div class="alert alert-secondary d-flex" role="alert">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shopping-basket fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1 px-3">
+                        <h4>Order Details</h4>
+                        <p class="mb-2">Order placed on {{ order.created_at|date:'DATETIME_FORMAT' }} by <a href="{% url 'marketplace:user_seller_profile' order.created_by.pk %}">@{{ order.created_by.username }}</a>.</p>
+                        <p>
+                            <span class="badge bg-secondary text-uppercase me-3">{{ order.get_status_display }}</span><span>Buyer is waiting for your response.</span>
+                        </p>
+                        <p class="m-0">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmPackOrderModal"><i class="fas fa-check-circle me-2"></i>&nbsp;Pack Item</button>
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmCancelOrderModal"><i class="far fa-trash-alt me-2"></i>&nbsp;Cancel Order</button>
+                        </p>
+                    </div>
+                </div>
+            {% elif order.status == 1 %}
+                <div class="alert alert-info d-flex" role="alert">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shopping-basket fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1 px-3">
+                        <h4>Order Details</h4>
+                        <p class="mb-2">Order placed on {{ order.created_at|date:'DATETIME_FORMAT' }} by <a href="{% url 'marketplace:user_seller_profile' order.created_by.pk %}">@{{ order.created_by.username }}</a>.</p>
+                        <p class="mb-2">Order updated on {{ order.updated_at|date:'DATETIME_FORMAT' }}</p>
+                        <p>
+                            <span class="badge bg-info text-dark text-uppercase me-3">{{ order.get_status_display }}</span><span>You have packed this item on {{ order.updated_at|date:'DATETIME_FORMAT' }}</span>
+                        </p>
+                        <p class="m-0">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmShipOrderModal"><i class="fas fa-check-circle me-2"></i>&nbsp;Ship Item</button>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmDeliverOrderModal"><i class="fas fa-check-circle me-2"></i>&nbsp;Deliver Item</button>
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmCancelOrderModal"><i class="far fa-trash-alt me-2"></i>&nbsp;Cancel Order</button>
+                        </p>
+                    </div>
+                </div>
+            {% elif order.status == 2 %}
+                <div class="alert alert-primary d-flex" role="alert">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shopping-basket fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1 px-3">
+                        <h4>Order Details</h4>
+                        <p class="mb-2">Order placed on {{ order.created_at|date:'DATETIME_FORMAT' }} by <a href="{% url 'marketplace:user_seller_profile' order.created_by.pk %}">@{{ order.created_by.username }}</a>.</p>
+                        <p class="mb-2">Order updated on {{ order.updated_at|date:'DATETIME_FORMAT' }}</p>
+                        <p>
+                            <span class="badge bg-primary text-uppercase me-3">{{ order.get_status_display }}</span><span>You have shipped this item through a courier {{ order.updated_at|date:'DATETIME_FORMAT' }}</span>
+                        </p>
+                        <p class="m-0">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmDeliverOrderModal"><i class="fas fa-check-circle me-2"></i>&nbsp;Deliver Item</button>
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmCancelOrderModal"><i class="far fa-trash-alt me-2"></i>&nbsp;Cancel Order</button>
+                        </p>
+                    </div>
+                </div>
+            {% elif order.status == 3 %}
+                <div class="alert alert-success d-flex" role="alert">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shopping-basket fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1 px-3">
+                        <h4>Order Details</h4>
+                        <p class="mb-2">Order placed on {{ order.created_at|date:'DATETIME_FORMAT' }} by <a href="{% url 'marketplace:user_seller_profile' order.created_by.pk %}">@{{ order.created_by.username }}</a>.</p>
+                        <p class="mb-2">Order updated on {{ order.updated_at|date:'DATETIME_FORMAT' }}</p>
+                        <p class="m-0">
+                            <span class="badge bg-success text-uppercase me-3">{{ order.get_status_display }}</span><span>This item has been delivered to the buyer {{ order.updated_at|date:'DATETIME_FORMAT' }}</span>
+                        </p>
+                    </div>
+                </div>
+            {% elif order.status == 81 %}
+                <div class="alert alert-danger d-flex" role="alert">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shopping-basket fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1 px-3">
+                        <h4>Order Details</h4>
+                        <p class="mb-2">Order placed on {{ order.created_at|date:'DATETIME_FORMAT' }} by <a href="{% url 'marketplace:user_seller_profile' order.created_by.pk %}">@{{ order.created_by.username }}</a>.</p>
+                        <p class="m-0">
+                            <span class="badge bg-danger text-uppercase me-3">{{ order.get_status_display }}</span><span><a href="{% url 'marketplace:user_seller_profile' order.created_by.pk %}">@{{ order.created_by.username }}</a> cancelled this order on {{ order.updated_at|date:'DATETIME_FORMAT' }}</span>
+                        </p>
+                    </div>
+                </div>
+            {% elif order.status == 82 %}    
+                <div class="alert alert-danger d-flex" role="alert">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shopping-basket fa-3x"></i>
+                    </div>
+                    <div class="flex-grow-1 px-3">
+                        <h4>Order Details</h4>
+                        <p class="mb-2">Order placed on {{ order.created_at|date:'DATETIME_FORMAT' }}</p>
+                        <p class="m-0">
+                            <span class="badge bg-danger text-uppercase me-3">{{ order.get_status_display }}</span><span>You have cancelled this order on {{ order.updated_at|date:'DATETIME_FORMAT' }}</span>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+            <h3>{{ order.posting.title }}</h3>
+            <h2><strong>&#8369;{{ order.posting.price|floatformat:"2g" }}</strong></h2>
+            <p>Listed {{ order.posting.created_at|date }}</p>
+            <a href="{% url 'marketplace:selling_listing_detail' order.posting.pk %}" class="btn btn-primary btn-lg">View Listing</a>
+            <hr class="my-4" />
+            <h4 class="my-4">Specifications</h4>
+            <div class="row row-cols-3">
+                <div class="col">
+                    <p class="m-0"><strong><small>Condition</small></strong></p>
+                    <p>{{ order.posting.get_condition_display }}</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Manufacturer</small></strong></p>
+                    <p>{{ order.posting.manufacturer }}</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Model Na</small>me</strong></p>
+                    <p>{{ order.posting.model_name }}</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Length</small></strong></p>
+                    <p>{{ order.posting.length_cm }}&nbsp;cm</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Width</small></strong></p>
+                    <p>{{ order.posting.width_cm }}&nbsp;cm</p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Height</small></strong></p>
+                    <p>{{ order.posting.height_cm }}&nbsp;cm</p>
+                </div>
+            </div>
+            <hr class="my-4" />
+            <h4 class="my-4">Description</h4>
+            <p>{{ order.posting.description }}</p>
+            <hr class="my-4"" />
+            <h4 class="my-4">Checkout Options</h4>
+            <div class="row row-cols-3">
+                <div class="col">
+                    <p class="m-0"><strong><small>Meetup</small></strong></p>
+                    <p>
+                        {% if order.posting.can_meetup %}
+                        <span class="text-success"><i class="fas fa-check-circle"></i></span>&nbsp;Yes
+                        {% else %}
+                        <span class="text-danger"><i class="fas fa-times-circle"></i></span>&nbsp;No
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Delivery</small></strong></p>
+                    <p>
+                        {% if order.posting.can_deliver %}
+                        <span class="text-success"><i class="fas fa-check-circle"></i></span>&nbsp;Yes
+                        {% else %}
+                        <span class="text-danger"><i class="fas fa-times-circle"></i></span>&nbsp;No
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col">
+                    <p class="m-0"><strong><small>Address</small></strong></p>
+                    <p class="m-0">{{ order.posting.address }}</p>
+                    <p>{{ order.posting.postal_code }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div  class="sticky-top mb-4" style="top: 5rem;">
+                <div id="ui-product-gallery">
+                    <div id="main-slider" class="splide mb-2">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                {% if images|length > 0 %}
+                                    {% for image in images %}
+                                        <li class="splide__slide">
+                                            <div class="image">
+                                                <img class="img-background" src="{{ image.image.url }}">
+                                                <img class="img-foreground" src="{{ image.image.url }}">
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="splide__slide">
+                                        <div class="image">
+                                            <img class="img-background" src="{% static 'main\img\720.jpg' %}">
+                                            <img class="img-foreground" src="{% static 'main\img\720.jpg' %}">
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="thumbnail-slider" class="splide mb-4">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                {% if images|length > 0 %}
+                                    {% for image in images %}
+                                        <li class="splide__slide">
+                                            <img class="img-fluid foreground-image shadow-lg"
+                                            src="{{ image.image.url }}">
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="splide__slide">
+                                        <img class="img-fluid foreground-image shadow-lg"
+                                            src="{% static 'main\img\720.jpg' %}">
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if order.status == 0 %}
+    <div class="modal fade" id="confirmPackOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmPackOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:selling_fulfillment_pack' order.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmPackOrderModalLabel">Pack Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ order.posting.title }}</p>
+                        <p>Are you sure you want to accept and pack this order?</p>
+                        <p>This will notify the buyer that you have packed the item and ready for meetup or shipment.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle"></i>
+                            Pack Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmCancelOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmCancelOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:selling_fulfillment_cancel' order.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmCancelOrderModalLabel">Cancel Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ order.posting.title }}</p>
+                        <p>Are you sure you want to cancel this order?</p>
+                        <p>This will notify the buyer that you cannot fulfill this order.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-times-circle"></i>
+                            Cancel Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% elif order.status == 1 %}
+    <div class="modal fade" id="confirmShipOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmShipOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:selling_fulfillment_ship' order.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmShipOrderModalLabel">Ship Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ order.posting.title }}</p>
+                        <p>Are you sure you want to ship this order?</p>
+                        <p>This will notify the buyer that you have shipped the item through a courier.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle"></i>
+                            Ship Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmDeliverOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmDeliverOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:selling_fulfillment_deliver' order.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeliverOrderModalLabel">Deliver Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ order.posting.title }}</p>
+                        <p>Are you sure you want to deliver this order?</p>
+                        <p>This will notify the buyer that the item has been delivered successfully.</p>
+                        <p>You cannot cancel the order after marking the order as delivered.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle"></i>
+                            Deliver Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmCancelOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmCancelOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:selling_fulfillment_cancel' order.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmCancelOrderModalLabel">Cancel Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ order.posting.title }}</p>
+                        <p>Are you sure you want to cancel this order?</p>
+                        <p>This will notify the buyer that you cannot fulfill this order.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-times-circle"></i>
+                            Cancel Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% elif order.status == 2 %}
+    <div class="modal fade" id="confirmDeliverOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmDeliverOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:selling_fulfillment_deliver' order.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeliverOrderModalLabel">Deliver Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ order.posting.title }}</p>
+                        <p>Are you sure you want to deliver this order?</p>
+                        <p>This will notify the buyer the item has been delivered successfully.</p>
+                        <p>You cannot cancel the order after marking the order as delivered.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check-circle"></i>
+                            Deliver Item
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirmCancelOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmCancelOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="{% url 'marketplace:selling_fulfillment_cancel' order.pk %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmCancelOrderModalLabel">Cancel Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="lead">{{ order.posting.title }}</p>
+                        <p>Are you sure you want to cancel this order?</p>
+                        <p>This will notify the buyer that you cannot fulfill this order.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-times-circle"></i>
+                            Cancel Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'splide/js/splide.min.js' %}"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var main = new Splide( '#main-slider', {
+            type       : 'fade',
+            cover      : false,
+            rewind     : true,
+            pagination : false,
+            arrows     : false,
+        });
+        var thumbnails = new Splide( '#thumbnail-slider', {
+            fixedWidth   : 60,
+            fixedHeight  : 60,
+            gap          : 10,
+            autoplay     : true,
+            rewind       : true,
+            pagination   : false,
+            cover        : true,
+            isNavigation : true,
+            focus        : 'center',
+            breakpoints: {
+                600: {
+                    fixedWidth : 44,
+                    fixedHeight: 44,
+                },
+            },
+        });
+        main.sync( thumbnails );
+        main.mount();
+        thumbnails.mount();
+    });
+</script>
+{% endblock %}

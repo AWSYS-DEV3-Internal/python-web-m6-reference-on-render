@@ -1,0 +1,19 @@
+{% load static %}
+<div class="d-flex my-2">
+    <div class="flex-shrink-0">
+        {% if widget.is_initial %}
+            <img class="img-fluid img-thumbnail" src="{{ widget.value.url }}" style="min-width: 200px; max-width: 200px;">
+            {% if not widget.required %}
+                <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+                <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>
+            {% endif %}<br>
+            {% comment %} <span class="text-muted">{{ widget.input_text }}:</span> {% endcomment %}
+        {% else %}
+            <img class="img-fluid img-thumbnail" src="{% static 'main/img/720.jpg' %}" style="min-width: 200px; max-width: 200px;">
+            {% comment %} <span class="text-muted">{{ widget.input_text }}:</span> {% endcomment %}
+        {% endif %}
+    </div>
+    <div class="flex-grow-1 ms-3 d-flex align-content-center flex-wrap">
+        <input class="form-control" type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+    </div>
+</div>

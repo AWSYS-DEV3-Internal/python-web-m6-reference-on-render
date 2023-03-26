@@ -1,0 +1,12 @@
+<div class="list-group">
+    <a href="{% url 'marketplace:buying_wishlist' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'buying_wishlist' %}active{% endif %}">
+        <div style="display: inline-block; margin-right: 1rem; min-width: 24px;"><i class="fas fa-heart"></i></div>
+        Wishlist
+        <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+    </a>
+    <a href="{% url 'marketplace:buying_orders' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'buying_orders' %}active{% endif %}">
+        <div style="display: inline-block; margin-right: 1rem; min-width: 24px;"><i class="fas fa-truck"></i></div>
+        Orders
+        <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+    </a>
+</div>

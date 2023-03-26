@@ -1,0 +1,108 @@
+{% load static %}
+<header>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'marketplace:index' %}">
+                <img src="{% static 'main/img/logo-full-color.png' %}" alt="">
+                <span>Marketplace</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item px-2">
+                        <a class="nav-link {% if request.resolver_match.url_name|slice:6 == 'browse' %}active{% endif %}" href="{% url 'marketplace:index' %}">
+                            <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                <i class="fa fa-store"></i>
+                            </span>
+                            <span>Browse All</span>
+                        </a>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-link {% if request.resolver_match.url_name|slice:6 == 'buying' %}active{% endif %}" href="{% url 'marketplace:buying_wishlist' %}">
+                            <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                <i class="fa fa-shopping-basket"></i>
+                            </span>
+                            <span>Buying</span>
+                        </a>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-link {% if request.resolver_match.url_name|slice:7 == 'selling' %}active{% endif %}" href="{% url 'marketplace:selling_listings' %}">
+                            <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                <i class="fa fa-tags"></i>
+                            </span>
+                            <span>Selling</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item navbar-text px-0 py-1">
+                            {% if user.userprofile %}
+                                <img class="img-fluid rounded-circle border me-2" src="{{ user.userprofile.display_image.url }}" style="max-height: 32px; vertical-align: middle;"/>
+                            {% else %}
+                                <img class="img-fluid rounded-circle border me-2" src="{% static '/main/img/628287_person_default_head_avatar_anonym_user_unknown.png' %}" style="max-height: 32px; vertical-align: middle;"/>
+                            {% endif %}
+                            <span class="me-2" style="vertical-align: middle;">Hello, {% if user.first_name %}{{ user.first_name }}{% else %}@{{ user.username }}{% endif %}
+                            </span>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link btn btn-light btn-sm" style="min-width: 40px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item {% if request.resolver_match.url_name == 'user_profile' %}active{% endif %}" href="{% url 'marketplace:user_profile' %}">
+                                        <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                            <i class="fas fa-user-circle"></i>
+                                        </span>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item {% if request.resolver_match.url_name == 'user_settings' %}active{% endif %}" href="{% url 'marketplace:user_settings' %}">
+                                        <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                            <i class="fas fa-cog"></i>
+                                        </span>
+                                        <span>Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'marketplace:logout' %}">
+                                        <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                        </span>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    {% else %}
+
+                        <li class="nav-item px-2">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'marketplace:register' %}">    
+                                <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                    <i class="fas fa-user-plus"></i>
+                                </span>
+                                <span>Register</span>
+                            </a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'marketplace:login' %}">  
+                                <span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </span>
+                                <span>Login</span>
+                            </a>
+                        </li>
+
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

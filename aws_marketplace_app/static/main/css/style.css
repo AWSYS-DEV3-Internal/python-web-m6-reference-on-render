@@ -1,0 +1,185 @@
+body {
+    padding-top: 56px;
+}
+
+.ui-main-content {
+    min-height: 100vh;
+}
+
+.navbar-brand img {
+    max-height: 32px;
+}
+
+#ui-bootstrap-messages .alert:first-child {
+    margin-top: 1rem;
+}
+
+#ui-homepage-carousel .carousel-item {
+    height: 50vh;
+}
+
+#ui-homepage-carousel .carousel-item img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ui-cover-image-container {
+    height: 40vh;
+    min-height: 40vh;
+    max-height: 40vh;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: -999;
+}
+
+.ui-cover-image-container::after {
+    content: "";
+    position: absolute;
+    height: 40vh;
+    min-height: 40vh;
+    max-height: 40vh;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.ui-profile-picture-container {
+    margin-top: -80px;
+}
+
+.ui-profile-picture-container img {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-width: 1px;
+}
+
+.dropdown-item-icon {
+    display: inline-block;
+    width: 24px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+#ui-posting-detail-carousel {
+    height: 350px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#ui-posting-detail-carousel .carousel-item {
+    height: 350px;
+}
+
+#ui-posting-detail-carousel .carousel-item .background-image {
+    position: absolute;
+    left: -5%;
+    top: -5%;
+    right: 0;
+    z-index: 1;
+    display: block;
+    width: 110%;
+    height: 110%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    -webkit-filter: brightness(50%) grayscale(50%) blur(10px);
+    -moz-filter: brightness(50%) grayscale(50%) blur(10px);
+    -o-filter: brightness(50%) grayscale(50%) blur(10px);
+    -ms-filter: brightness(50%) grayscale(50%) blur(10px);
+    filter: brightness(50%) grayscale(50%) blur(10px);
+}
+
+#ui-posting-detail-carousel .carousel-item .foreground-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: block;
+    height: 100%;
+}
+
+.ui-link-no-underline {
+    text-decoration: none !important;
+}
+
+.navbar {
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 15%);
+}
+
+.sidebar li {
+    position: relative;
+}
+
+.sidebar li .submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -1px;
+    min-width: 300px !important;
+    padding: 0;
+}
+
+.sidebar li:hover>.submenu {
+    display: block;
+}
+
+.splide__slide {
+    opacity: 0.3;
+  }
+  
+  .splide__slide.is-active {
+    opacity: 1;
+  }
+
+#main-slider {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#thumbnail-slider .splide__slide {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.image {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 100%;
+}
+
+.image img.img-foreground {
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    object-fit: scale-down;
+}
+.image img.img-background {
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    object-fit: cover;
+    transform: scale(1.1);
+    filter: blur(10px) grayscale(100%) brightness(75%);
+}
+
+.img-avatar-lg {
+    min-height: 200px;
+    min-width: 200px;
+    max-height: 200px;
+    max-width: 200px;
+}

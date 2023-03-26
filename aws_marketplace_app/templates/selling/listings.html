@@ -1,0 +1,84 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}Seller - Listings | AWS Marketplace{% endblock %}
+{% block content %}
+<div class="bg-light border-bottom">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <nav class="m-0 py-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="m-0 breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Selling</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Listings</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4">
+    <h3>
+        Selling
+    </h3>
+    <div class="row py-2">
+        <div class="col-3">
+            {% include "selling/sidebar.html" %}
+        </div>
+        <div class="col-9">
+            {% if posting_list|length > 0 %}
+                <div class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                    {% for posting in posting_list %}
+                    <div class="col">
+                        <div class="card mb-3" style="transform: rotate(0);">
+                            <div class="image">
+                                {% if posting.cover_images|length > 0 %}
+                                    <img class="img-background" src="{{ posting.cover_images.0.image.url }}"/>
+                                    <img class="img-foreground" src="{{ posting.cover_images.0.image.url }}"/>
+                                {% else %}
+                                    <img class="img-background" src="{% static 'main\img\720.jpg' %}">
+                                    <img class="img-foreground" src="{% static 'main\img\720.jpg' %}">
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <p class="m-0"><strong>&#8369;{{ posting.price|floatformat:"2g" }}</strong>
+                                </p>
+                                <p class="m-0">
+                                    {% if posting.is_draft %}
+                                    <span class="badge bg-secondary text-uppercase">Draft</span>
+                                    {% elif posting.is_sold %}
+                                        <span class="badge bg-danger text-light text-uppercase">Sold Out</span>
+                                    {% elif posting.is_reserved %}
+                                        <span class="badge bg-warning text-dark text-uppercase">Reserved</span>
+                                    {% endif %}
+                                    <a href="{% url 'marketplace:selling_listing_detail' posting.pk %}" class="text-decoration-none link-dark stretched-link">
+                                        {{ posting.title }}
+                                    </a>
+                                </p>
+                                <p class="m-0"><small>{{ posting.get_condition_display }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center">
+                    <h1 class="display-6">No Listings</h1>
+                    <img class="img-fluid m-5" src="{% static '\main\img\2456072.png' %}" style="max-height: 40vh;">
+                    <p class="lead">When you start selling, your listings will appear here.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'main/js/moment.min.js' %}"></script>
+<script type="text/javascript">
+    (function(){
+        Array.prototype.slice.call(document.getElementsByClassName("moment-date")).forEach(element => {
+            var momentString = moment(element.dataset.isoDate).fromNow();
+            element.innerHTML = momentString;
+        });
+    })();
+</script>
+{% endblock %}

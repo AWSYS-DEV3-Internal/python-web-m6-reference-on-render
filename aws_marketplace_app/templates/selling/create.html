@@ -1,0 +1,176 @@
+{% extends "main/layout.html" %}
+{% block title %}Create New Listing | AWS Marketplace{% endblock %}
+{% block content %}      
+{% load crispy_forms_tags %}
+<div class="bg-light border-bottom">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <nav class="m-0 py-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="m-0 breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Selling</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'marketplace:selling_listings' %}">Listings</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Create New Listing</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4">
+  <h3>
+    Create New Listing
+  </h3>
+  <form id="create-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row py-2">
+      <div class="col-3">
+        <div class="list-group sticky-top" style="top: 5rem;" id="list-example">
+          <a class="list-group-item list-group-item-action" href="#list-item-1">
+            Category
+            <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+          </a>
+          <a class="list-group-item list-group-item-action" href="#list-item-2">
+            Basic Information
+            <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+          </a>
+          <a class="list-group-item list-group-item-action" href="#list-item-3">
+            Specifications
+            <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+          </a>
+          <a class="list-group-item list-group-item-action" href="#list-item-4">
+            Checkout Options
+            <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+          </a>
+          <a class="list-group-item list-group-item-action" href="#list-item-5">
+            Images
+            <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+          </a>
+        </div>
+      </div>
+      <div class="col-7" data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+        <div id="list-item-1" class="card mb-4">
+          <div class="card-header">
+            <h4>Category</h4>
+          </div>
+          <div class="card-body">
+            {{ form.category|as_crispy_field }}
+          </div>
+        </div>
+        <div id="list-item-2" class="card mb-4">
+          <div class="card-header">
+            <h4>Basic Information</h4>
+          </div>
+          <div class="card-body">
+            {{ form.title|as_crispy_field }}
+            {{ form.price|as_crispy_field }}
+            {{ form.description|as_crispy_field }}
+          </div>
+        </div>
+        <div id="list-item-3" class="card mb-4">
+          <div class="card-header">
+            <h4>Specifications</h4>
+          </div>
+          <div class="card-body">
+            <div class="row row-cols-3">
+              <div class="col">
+                {{ form.condition|as_crispy_field }}
+              </div>
+              <div class="col">
+                  {{ form.manufacturer|as_crispy_field }}
+              </div>
+              <div class="col">
+                  {{ form.model_name|as_crispy_field }}
+              </div>
+              <div class="col">
+                  {{ form.length_cm|as_crispy_field }}
+              </div>
+              <div class="col">
+                  {{ form.width_cm|as_crispy_field }}
+              </div>
+              <div class="col">
+                  {{ form.height_cm|as_crispy_field }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="list-item-4" class="card mb-4">
+          <div class="card-header">
+            <h4>Checkout Options</h4>
+          </div>
+          <div class="card-body">
+            <div class="row row-cols-2">
+              <div class="col">
+                {{ form.can_meetup|as_crispy_field }}
+              </div>
+              <div class="col">
+                  {{ form.can_deliver|as_crispy_field }}
+              </div>
+              <div class="col">
+                {{ form.address|as_crispy_field }}
+              </div>
+              <div class="col">
+                  {{ form.postal_code|as_crispy_field }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="list-item-5" class="card mb-4">
+          <div class="card-header">
+            <h4>Images</h4>
+          </div>
+          <div class="card-body">
+            {{ formset.management_form }}
+            {% for form in formset %}
+                {{ form }}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="sticky-top" style="top: 5rem;">
+          <div class="d-grid gap-2">
+            {{ form.is_draft|as_crispy_field }}
+            <button id="form-publish-button" class="btn btn-primary btn-lg" type="submit">
+              <i class="fas fa-check-circle me-2"></i>
+              Publish
+            </button>
+            <button id="form-save-draft-button" class="btn btn-outline-primary" type="submit">
+              <i class="fas fa-save me-2"></i>
+              Save as Draft
+            </button>
+            <button id="form-reset-button" class="btn btn-outline-secondary" type="reset">
+              <i class="fas fa-undo me-2"></i>
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+  <script>
+    $("#form-publish-button").on("click", function(event){
+      event.preventDefault();
+      $('input[name="is_draft"]').val("False");
+      var form = document.querySelector('form');
+      form.requestSubmit();
+      return false;
+    });
+    $("#form-save-draft-button").on("click", function(event){
+      event.preventDefault();
+      $('input[name="is_draft"]').val("True");
+      var form = document.querySelector('form');
+      form.requestSubmit();
+      return false;
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+      var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+        target: '#list-example',
+        offset: 200
+      });
+    });
+  </script>
+{% endblock %}

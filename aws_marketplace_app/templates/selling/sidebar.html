@@ -1,0 +1,20 @@
+<div class="sticky-top" style="top: 5rem;">
+    <div class="d-grid gap-2 mb-4">
+        <a href="{% url 'marketplace:selling_listing_create' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-plus-circle me-2"></i>
+            <span>Create new Listing</span>
+        </a>
+    </div>
+    <div class="list-group">
+        <a href="{% url 'marketplace:selling_listings' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'selling_listings' %}active{% endif %}">
+            <div style="display: inline-block; margin-right: 1rem; min-width: 24px;"><i class="fas fa-tags"></i></div>
+            Your Listings
+            <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+        </a>
+        <a href="{% url 'marketplace:selling_fulfillments' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'selling_fulfillments' %}active{% endif %}">
+            <div style="display: inline-block; margin-right: 1rem; min-width: 24px;"><i class="fas fa-truck"></i></div>
+            Fullfilments
+            <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+        </a>
+    </div>
+</div>

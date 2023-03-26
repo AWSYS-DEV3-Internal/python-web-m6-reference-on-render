@@ -1,0 +1,254 @@
+{% extends "main/front_layout.html" %}
+{% load static %}
+{% block title %}Home | AWS Marketplace{% endblock %}
+{% block content %}
+<nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-dark border-bottom p-0">
+	<div class="container">
+		<a class="navbar-brand" href="/">
+			<img src="{% static 'main/img/logo.png' %}" alt="" style="max-height: 24px;">
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav me-auto mb-2 mb-md-0">
+			</ul>
+			<ul class="navbar-nav">
+				<li class="nav-item px-2">
+					<a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="/register">    
+						<span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+							<i class="fas fa-user-plus"></i>
+						</span>
+						<span>Register</span>
+					</a>
+				</li>
+				<li class="nav-item px-2">
+					<a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="/login">  
+						<span style="display: inline-block; min-width: 24px; max-width: 24px; margin-right: 0.25rem;">
+							<i class="fas fa-sign-in-alt"></i>
+						</span>
+						<span>Login</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light border-bottom" style="margin-top: 41px;">
+	<div class="container">
+		<a class="navbar-brand" href="/">
+			<img src="{% static 'main/img/logo-full-color.png' %}" alt="" style="max-height: 24px;">
+			<span class="text-primary">Marketplace</span>
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<form class="d-flex me-auto">
+				<div class="input-group">
+					<input class="form-control" type="search" placeholder="Search for an item" aria-label="Search">
+					<button class="btn btn-success" type="submit">
+						<span><i class="fas fa-search"></i></span>
+					</button>
+				</div>
+			</form>
+			<ul class="navbar-nav mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="btn btn-primary px-5" aria-current="page" href="#">Sell</a>
+				  </li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container">
+	<main>
+		<div id="myCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
+					aria-current="true" aria-label="Slide 1"></button>
+				<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+				<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+			</div>
+			<div id="ui-homepage-carousel" class="carousel-inner">
+				<div class="carousel-item active">
+					<img class="img-fluid"
+						src="{% static 'main\img\carousel\artificial-photography-vB5qtt8X4NA-unsplash.jpg' %}" alt="artificial-photography-vB5qtt8X4NA-unsplash">
+					<div class="container">
+						<div class="carousel-caption">
+							<h1>Example headline.</h1>
+							<p>Some representative placeholder content for the first slide of the carousel.</p>
+							<p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<img class="img-fluid"
+						src="{% static 'main\img\carousel\charisse-kenion-9T0hl9Ro3Zg-unsplash.jpg' %}" alt="charisse-kenion-9T0hl9Ro3Zg-unsplash">
+					<div class="container">
+						<div class="carousel-caption">
+							<h1>Another example headline.</h1>
+							<p>Some representative placeholder content for the second slide of the carousel.</p>
+							<p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<img class="img-fluid"
+						src="{% static 'main\img\carousel\donatella-d-anniballe-1Q6qGGBduY4-unsplash.jpg' %}" alt="donatella-d-anniballe-1Q6qGGBduY4-unsplash">
+					<div class="container">
+						<div class="carousel-caption">
+							<h1>One more for good measure.</h1>
+							<p>Some representative placeholder content for the third slide of this carousel.</p>
+							<p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+		<div class="container marketing">
+			<div class="row">
+				<div class="col-12">
+					<h2 class="text-center my-5">
+						Why choose <img src="{% static 'main/img/logo-full-color.png' %}" alt="" style="max-height: 48px;"> Marketplace as Ecommerce Platform?
+					</h2>
+					<img src="{% static 'main/img/error_404.jpg' %}" alt="" style="max-width: 100%;">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				</div>
+				<div class="col-4">
+					<i class="fa fa-store fa-3x my-4 text-primary"></i>
+					<h5>The only platform you need to control your entire business</h5>
+					<p>The AWS Marketplace platform has comprehensive built-in tools and features, plus a library of
+						third-party apps, to make your store even more powerful.</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col-4">
+					<i class="fa fa-tachometer-alt fa-3x my-4 text-primary"></i>
+					<h5>Take control of your business</h5>
+					<p>AWS Marketplace handles all aspects of your business—use our best-in-class suite of business
+						tools to build a complete business command center.</p>
+				</div>
+				<div class="col">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				</div>
+				<div class="col-4">
+					<i class="fa fa-shipping-fast fa-3x my-4 text-primary"></i>
+					<h5>Power every business function</h5>
+					<p>Shop Pay streamlines checkout and boosts conversions, AWS Marketplace POS handles in-person
+						sales, and AWS Marketplace Fulfillment gets products into customers' hands.</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col-4">
+					<i class="fa fa-trophy fa-3x my-4 text-primary"></i>
+					<h5>Use an easy, accessible platform</h5>
+					<p>Best of all, you don't need a big budget or technical coding skills to launch with AWS
+						Marketplace. No commitments, no free trials, no credit card required. Its free!</p>
+				</div>
+				<div class="col">
+				</div>
+			</div>
+			<div class="row featurette">
+				<div id="breaker"></div>
+			</div>
+			<div class="row featurette">
+				<h2 class="text-center my-4">Managing your online business has never been easier</h2>
+				<div class="row my-5">
+					<div class="col">
+					</div>
+					<div class="col-4">
+						<div>
+							<h5>Scale on a reliable platform</h5>
+							<p>Leverage tools specifically made for each stage of business growth. Propel your
+								business even further with insightful analytics about your online business.</p>
+						</div>
+					</div>
+					<div class="col">
+					</div>
+					<div class="col-4">
+						<div>
+							<h5>Streamline checkout to drive conversions</h5>
+							<p>Convert lots of customers with Shop Pay, the fastest and best-converting checkout
+								experience on the internet.</p>
+						</div>
+					</div>
+					<div class="col">
+					</div>
+				</div>
+				<div class="row my-4">
+					<div class="col">
+					</div>
+					<div class="col-4">
+						<div>
+							<h5>Boost sales and SEO with fast-loading pages</h5>
+							<p>Put your online store at the top of Google search pages with SEO tools that boost
+								site speed and help you optimize meta data for keywords.</p>
+						</div>
+					</div>
+					<div class="col">
+					</div>
+					<div class="col-4">
+						<div>
+							<h5>Simplify site admin with web hosting</h5>
+							<p>Every AWS Marketplace plan includes web hosting at no additional cost. You don't need
+								to mess with third parties, spend extra money, or manage updates yourself.</p>
+						</div>
+					</div>
+					<div class="col">
+					</div>
+				</div>
+				<div class="row my-4">
+					<div class="col">
+					</div>
+					<div class="col-4">
+						<div>
+							<h5>Sell everywhere from anywhere</h5>
+							<p>AWS Marketplace has tools for online and in-person selling, including AWS Marketplace
+								POS and local delivery. Sync all your sales and inventory data in a single place.
+							</p>
+						</div>
+					</div>
+					<div class="col">
+					</div>
+					<div class="col-4">
+						<div>
+							<h5>Fulfill orders and exceed customer expectations</h5>
+							<p>New order notifications, automated emails, and tracking information help you and your
+								customers stay on top of order shipments.</p>
+						</div>
+					</div>
+					<div class="col">
+					</div>
+				</div>
+			</div>
+
+			<hr class="featurette-divider my-5">
+
+			<h1 class="display-1 text-center">“”</h1>
+			<h4 class="text-center">
+				“AWS Marketplace is a quick and affordable way to create your online store.<br>
+				AWS Marketplace is amazing for people who don't know how to make their own website.”
+			</h4>
+			<h5 class="text-center text-muted">Anisa M</h5>
+
+			<hr class="featurette-divider my-5">
+		</div>
+	</main>
+</div>
+{% include 'main/includes/footer.html' %}
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}Buying - Orders | AWS Marketplace{% endblock %}
+{% block content %}
+<div class="bg-light border-bottom">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <nav class="m-0 py-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="m-0 breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Buying</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4">
+    <h3>
+        Buying
+    </h3>
+    <div class="row py-2">
+        <div class="col-3">
+            {% include "buying/sidebar.html" %}
+        </div>
+        <div class="col-9">
+            {% if order_list|length > 0 %}
+                <div class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                    {% for order in order_list %}
+                    <div class="col">
+                        <div class="card mb-3" style="transform: rotate(0);">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        {% if order.posting.created_by.userprofile %}
+                                            <img src="{{ order.posting.created_by.userprofile.display_image.url }}"
+                                            class="img-fluid rounded-circle border"
+                                            style="max-height: 48px;" />
+                                        {% else %}
+                                            <img src="{% static 'main\img\628287_person_default_head_avatar_anonym_user_unknown.png' %}"
+                                            class="img-fluid rounded-circle border"
+                                            style="max-height: 48px;" />
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <strong>{{ order.posting.created_by.username }}</strong><br>
+                                        <small class="text-muted moment-date" data-iso-date='{{ order.posting.created_at|date:"r" }}'></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="image">
+                                {% if order.posting.postingimage_set.all|length > 0 %}
+                                    <img class="img-background" src="{{ order.posting.postingimage_set.all.0.image.url }}"/>
+                                    <img class="img-foreground" src="{{ order.posting.postingimage_set.all.0.image.url }}"/>
+                                {% else %}
+                                    <img class="img-background" src="{% static 'main\img\item-sale.jpg' %}">
+                                    <img class="img-foreground" src="{% static 'main\img\item-sale.jpg' %}">
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <p class="m-0"><strong>&#8369;{{ order.posting.price|floatformat:"2g" }}</strong>
+                                </p>
+                                <p class="m-0"><a href="{% url 'marketplace:buying_order_detail' order.pk %}" class="text-decoration-none link-dark stretched-link">{{ order.posting.title }}</a></p>
+                                <p class="m-0"><small>{{ order.posting.get_condition_display }}</small></p>
+                            </div>
+                            <div class="card-footer">
+                                <p class="m-0">
+                                    {% if order.status == 0 %}
+                                        <span class="badge bg-secondary text-uppercase">{{ order.get_status_display }}</span>
+                                    {% elif order.status == 1 %}
+                                        <span class="badge bg-info text-dark text-uppercase">{{ order.get_status_display }}</span>
+                                    {% elif order.status == 2 %}
+                                        <span class="badge bg-primary text-uppercase">{{ order.get_status_display }}</span>
+                                    {% elif order.status == 3 %}
+                                        <span class="badge bg-success text-uppercase">{{ order.get_status_display }}</span>
+                                    {% elif order.status == 81 %}
+                                        <span class="badge bg-danger text-uppercase">{{ order.get_status_display }}</span>
+                                    {% elif order.status == 82 %}
+                                        <span class="badge bg-danger text-uppercase">{{ order.get_status_display }}</span>
+                                    {% endif %}
+                                </p>
+                                <p class="m-0">Order placed <span class="moment-date" data-iso-date='{{ order.created_at|date:"r" }}'></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center">
+                    <h1 class="display-6">No Orders</h1>
+                    <img class="img-fluid m-5" src="{% static '\main\img\2456072.png' %}" style="max-height: 40vh;">
+                    <p class="lead">When you place an order for an item, the orders will appear here.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'main/js/moment.min.js' %}"></script>
+<script type="text/javascript">
+    (function(){
+        Array.prototype.slice.call(document.getElementsByClassName("moment-date")).forEach(element => {
+            var momentString = moment(element.dataset.isoDate).fromNow();
+            element.innerHTML = momentString;
+        });
+    })();
+</script>
+{% endblock %}

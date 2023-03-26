@@ -1,0 +1,33 @@
+body {
+    padding-top: 98px;
+}
+
+#myCarousel {
+    max-height: 50vh;
+    border-radius: 0px 0px 20px 20px;
+    overflow: hidden;
+}
+
+#myCarousel .carousel-item {
+    max-height: 50vh;
+    overflow: hidden;
+}
+
+#myCarousel .carousel-caption {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgb(0,0,0);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 00%, rgba(255,255,255,0.8) 70%, rgba(255,255,255,0) 100%);
+    padding-top: 200px;
+}
+
+#breaker {
+    background-image: url("/static/main/img/tran-mau-tri-tam-tZnbakTUcTI-unsplash.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 40vh;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 20px;
+}

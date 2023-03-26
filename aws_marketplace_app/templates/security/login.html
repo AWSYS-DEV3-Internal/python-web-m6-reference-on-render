@@ -1,0 +1,48 @@
+{% extends 'main/security_layout.html' %}
+{% load static %}
+{% block title %}Login | AWS Marketplace{% endblock %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load bootstrap5 %}
+<div class="backdrop">
+	<div class="container-fluid p-0">
+		<div class="row g-0">
+			<div class="col-xs-12 col-md-6 col-lg-4 col-xl-4">
+				<div class="container-fluid">
+					<div class="row g-1">
+						<div class="col px-4">
+							<div class="parent">
+								<div class="child">
+									<h2 class="text-center mb-4">
+										<img class="img-logo" src="{% static 'main/img/logo-full-color.png' %}">
+										<span class="text-primary">Marketplace</span>
+									</h2>
+									<h1 class="text-center mb-4">Login</h1>
+									{% bootstrap_messages %}
+									<form method="POST">
+										{% csrf_token %}
+										{{ login_form|crispy }}              
+										<div class="d-grid gap-2">
+											<button class="btn btn-primary btn-lg btn-block" type="submit">
+												<span>Login</span>
+											</button>
+										</div>
+									</form>
+									<p class="text-center mt-4"><a href="{% url 'marketplace:password_reset' %}">Forgot password?</a></p>
+									<p class="text-center mt-4 text-muted">
+										Don't have an account?
+										<a class="btn btn-outline-secondary btn-sm" href="{% url 'marketplace:register' %}">Create an account</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="ui-login-banner" class="col-xs-0 col-md-6 col-lg-8 col-xl-8">
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

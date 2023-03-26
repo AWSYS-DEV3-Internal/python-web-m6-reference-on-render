@@ -1,0 +1,65 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}Seller Profile - {% if seller_user.first_name %}{{ seller_user.first_name }} {{ seller_user.last_name }}{% else %}@{{ seller_user.username }}{% endif %} | AWS Marketplace{% endblock %}
+{% block content %}
+<div class="ui-cover-image-container" style="background-image: url('/static/main/img/4958172.png');">
+</div>
+<div class="container-fluid"> 
+    <div class="row" style="min-height: 100vh;">
+        <div class="col-3 text-center">
+            <div class="ui-profile-picture-container d-flex mb-2">
+                {% if seller_user.userprofile %}
+                    <img src="{{ seller_user.userprofile.display_image.url }}" class="img-thumbnail rounded-circle"/>
+                {% else %}
+                    <img src="{% static 'main\img\628287_person_default_head_avatar_anonym_user_unknown.png' %}" class="img-thumbnail rounded-circle"/>
+                {% endif %}
+            </div>
+            <h3>{{ seller_user.first_name }} {{ seller_user.last_name }}</h3>
+            <p>@{{ seller_user.username }}</p>
+            <p>Member since {{ seller_user.date_joined|date }}</p>
+            {% if user.userprofile %}
+                <hr/>
+                {% if user.userprofile.biography %}<p><i class="fas fa-info-circle text-primary"></i>&nbsp;{{ user.userprofile.biography }}</p>{% endif %}
+                {% if user.userprofile.address %}<p><i class="fas fa-map-marker-alt text-danger"></i>&nbsp;{{ user.userprofile.address }}</p>{% endif %}
+            {% endif %}
+        </div>
+        <div class="col-9">
+            {% if posting_list|length > 0 %}
+                <div class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                    {% for posting in posting_list %}
+                    <div class="col">
+                        <div class="card mb-3" style="transform: rotate(0);">
+                            <div class="image">
+                                {% if posting.postingimage_set.all|length > 0 %}
+                                    <img class="img-background" src="{{ posting.postingimage_set.all.0.image.url }}"/>
+                                    <img class="img-foreground" src="{{ posting.postingimage_set.all.0.image.url }}"/>
+                                {% else %}
+                                    <img class="img-background" src="{% static 'main\img\720.jpg' %}">
+                                    <img class="img-foreground" src="{% static 'main\img\720.jpg' %}">
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <p class="m-0"><strong>&#8369;{{ posting.price|floatformat:"2g" }}</strong>
+                                </p>
+                                <p class="m-0">
+                                    <a href="{% url 'marketplace:selling_listing_detail' posting.pk %}" class="text-decoration-none link-dark stretched-link">
+                                        {{ posting.title }}
+                                    </a>
+                                </p>
+                                <p class="m-0"><small>{{ posting.get_condition_display }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center my-4">
+                    <h1 class="display-6">No Listings</h1>
+                    <img class="img-fluid m-5" src="{% static '\main\img\2456072.png' %}" style="max-height: 40vh;">
+                    <p class="lead">When seller puts an item for sale, the items will appear here.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

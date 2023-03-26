@@ -1,0 +1,12 @@
+<div class="list-group">
+    <a href="{% url 'marketplace:user_settings' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'user_settings' %}active{% endif %}">
+        <div style="display: inline-block; margin-right: 1rem;"><i class="fas fa-user-circle"></i></div>
+        Edit Profile
+        <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+    </a>
+    <a href="{% url 'marketplace:user_change_password' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'user_change_password' %}active{% endif %}">
+        <div style="display: inline-block; margin-right: 1rem;"><i class="fas fa-key"></i></div>
+        Change Password
+        <div style="float: right;"><i class="fas fa-angle-right"></i></div>
+    </a>
+</div>
